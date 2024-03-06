@@ -1,0 +1,5 @@
+tritonclient[all] 
+opencv-python
+pycocotools
+tqdm
+PyYAML
