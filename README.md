@@ -1,6 +1,9 @@
 # Triton Inference Server Client For YOLO Models
 
-# YOLOv7 Triton Inference Server Deployment
+The Triton Inference Server simplifies the deployment of machine learning models with a plethora of out-of-the-box benefits, including a GRPC and HTTP interface, automatic scheduling on multiple GPUs, shared memory utilization (even on GPUs), dynamic server-side batching, health metrics, and memory resource management.
+
+This repository utilizes the Triton Inference Server Client, which streamlines the complexity of model deployment. <br>
+The client is lightweight and requires minimal infrastructure, making it an ideal choice for deploying/testing YOLO models efficiently.
 
 This repository is a continuation of the work on Triton Client by Philipp Schmidt, available [here](https://github.com/philipp-schmidt/yolov7/tree/triton-deploy/deploy/triton-inference-server).
 
