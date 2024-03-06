@@ -32,6 +32,8 @@ Download Coco Dataset Manually.
 ```bash
 bash ./scripts/get_coco.sh
 ```
+Start Triton Server in Evaluation Mode [triton-server-using-models-for-evaluation-purposes](https://github.com/levipereira/triton-server-yolo/blob/master/README.md#starting-triton-server-using-models-for-evaluation-purposes)
+
 
 ### How to Evalulate Coco Dataset
 Example: 
@@ -103,8 +105,12 @@ options:
 
 ```
 
-## How to Inference model in your code
+## How to Inference model in your code 
 
+### Prerequisite 
+Start Triton Server in Inference Mode [triton-server-using-models-for-inference-purposes](https://github.com/levipereira/triton-server-yolo/blob/master/README.md#starting-triton-server-using-models-for-inference-purposes)
+
+### Inference your own data
 Example client can be found in client.py. It can run dummy input, images and videos.
 
 ```bash
