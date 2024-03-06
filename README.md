@@ -12,8 +12,8 @@ This repository is a continuation of the work on Triton Client by Philipp Schmid
 - Added support for evaluating the model using the COCO dataset with models built on TensorRT engines.
 
 ### Triton Server 
-The triton-server must be runining and up with models ready.<br>
-Use this repo [triton-server-yolo](https://github.com/levipereira/triton-server-yolo) to configure triton-server.
+Make sure that the Triton Server is up and running with the required models.
+To set up the Triton Server, you can utilize the repository [triton-server-yolo](https://github.com/levipereira/triton-server-yolo).
 
 
 ## Install Triton Client YOLO
