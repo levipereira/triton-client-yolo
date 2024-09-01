@@ -196,7 +196,7 @@ if __name__ == '__main__':
 
         inputs = []
         outputs = []
-        inputs.append(grpcclient.InferInput(INPUT_NAMES[0], [1, 3, FLAGS.width, FLAGS.height], "FP32"))
+        inputs.append(grpcclient.InferInput(INPUT_NAMES[0], [1, 3, FLAGS.height , FLAGS.width], "FP32"))
         outputs.append(grpcclient.InferRequestedOutput(OUTPUT_NAMES[0]))
         outputs.append(grpcclient.InferRequestedOutput(OUTPUT_NAMES[1]))
         outputs.append(grpcclient.InferRequestedOutput(OUTPUT_NAMES[2]))
@@ -207,7 +207,7 @@ if __name__ == '__main__':
         if input_image is None:
             print(f"FAILED: could not load input image {str(FLAGS.input)}")
             sys.exit(1)
-        input_image_buffer = preprocess(input_image, [FLAGS.width, FLAGS.height])
+        input_image_buffer = preprocess(input_image, [FLAGS.height, FLAGS.width])
         input_image_buffer = np.expand_dims(input_image_buffer, axis=0)
 
         inputs[0].set_data_from_numpy(input_image_buffer)
@@ -234,7 +234,7 @@ if __name__ == '__main__':
         det_boxes = results.as_numpy(OUTPUT_NAMES[1])
         det_scores = results.as_numpy(OUTPUT_NAMES[2])
         det_classes = results.as_numpy(OUTPUT_NAMES[3])
-        detected_objects = postprocess(num_dets, det_boxes, det_scores, det_classes, input_image.shape[1], input_image.shape[0], [FLAGS.width, FLAGS.height])
+        detected_objects = postprocess(num_dets, det_boxes, det_scores, det_classes, input_image.shape[1], input_image.shape[0], [FLAGS.height , FLAGS.width])
         print(f"Detected objects: {len(detected_objects)}")
 
         for box in detected_objects:
