@@ -131,6 +131,7 @@ optional arguments:
   -h, --help            show this help message and exit
   -m MODEL, --model MODEL
                         Inference model name, default yolov7
+  --half                FP16 half-precision export
   --width WIDTH         Inference model input width, default 640
   --height HEIGHT       Inference model input height, default 640
   -u URL, --url URL     Inference server URL, default localhost:8001

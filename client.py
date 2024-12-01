@@ -31,6 +31,9 @@ if __name__ == '__main__':
                         required=False,
                         default='yolov7',
                         help='Inference model name, default yolov7')
+    parser.add_argument('--half', 
+                        action='store_true',
+                        help='FP16 half-precision export')
     parser.add_argument('--width',
                         type=int,
                         required=False,
@@ -162,7 +165,10 @@ if __name__ == '__main__':
         print("Creating emtpy buffer filled with ones...")
         inputs = []
         outputs = []
-        inputs.append(grpcclient.InferInput(INPUT_NAMES[0], [1, 3, FLAGS.width, FLAGS.height], "FP32"))
+        if FLAGS.half:
+            inputs.append(grpcclient.InferInput(INPUT_NAMES[0], [1, 3, FLAGS.width, FLAGS.height], "FP16"))
+        else:
+            inputs.append(grpcclient.InferInput(INPUT_NAMES[0], [1, 3, FLAGS.width, FLAGS.height], "FP32"))
         inputs[0].set_data_from_numpy(np.ones(shape=(1, 3, FLAGS.width, FLAGS.height), dtype=np.float32))
         outputs.append(grpcclient.InferRequestedOutput(OUTPUT_NAMES[0]))
         outputs.append(grpcclient.InferRequestedOutput(OUTPUT_NAMES[1]))
@@ -196,7 +202,10 @@ if __name__ == '__main__':
 
         inputs = []
         outputs = []
-        inputs.append(grpcclient.InferInput(INPUT_NAMES[0], [1, 3, FLAGS.width, FLAGS.height], "FP32"))
+        if FLAGS.half:
+            inputs.append(grpcclient.InferInput(INPUT_NAMES[0], [1, 3, FLAGS.width, FLAGS.height], "FP16"))
+        else:
+            inputs.append(grpcclient.InferInput(INPUT_NAMES[0], [1, 3, FLAGS.width, FLAGS.height], "FP32"))
         outputs.append(grpcclient.InferRequestedOutput(OUTPUT_NAMES[0]))
         outputs.append(grpcclient.InferRequestedOutput(OUTPUT_NAMES[1]))
         outputs.append(grpcclient.InferRequestedOutput(OUTPUT_NAMES[2]))
@@ -209,9 +218,11 @@ if __name__ == '__main__':
             sys.exit(1)
         input_image_buffer = preprocess(input_image, [FLAGS.width, FLAGS.height])
         input_image_buffer = np.expand_dims(input_image_buffer, axis=0)
-
+        if FLAGS.half:
+            input_image_buffer = input_image_buffer.astype(np.float16)
         inputs[0].set_data_from_numpy(input_image_buffer)
 
+        print("debug",input_image.dtype)
         print("Invoking inference...")
         results = triton_client.infer(model_name=FLAGS.model,
                                       inputs=inputs,
@@ -243,7 +254,6 @@ if __name__ == '__main__':
             size = get_text_size(input_image, f"{COCOLabels(box.classID).name}: {box.confidence:.2f}", normalised_scaling=0.6)
             input_image = render_filled_box(input_image, (box.x1 - 3, box.y1 - 3, box.x1 + size[0], box.y1 + size[1]), color=(220, 220, 220))
             input_image = render_text(input_image, f"{COCOLabels(box.classID).name}: {box.confidence:.2f}", (box.x1, box.y1), color=(30, 30, 30), normalised_scaling=0.5)
-
         if FLAGS.out:
             cv2.imwrite(FLAGS.out, input_image)
             print(f"Saved result to {FLAGS.out}")
@@ -261,7 +271,10 @@ if __name__ == '__main__':
 
         inputs = []
         outputs = []
-        inputs.append(grpcclient.InferInput(INPUT_NAMES[0], [1, 3, FLAGS.width, FLAGS.height], "FP32"))
+        if FLAGS.half:
+            inputs.append(grpcclient.InferInput(INPUT_NAMES[0], [1, 3, FLAGS.width, FLAGS.height], "FP16"))
+        else:
+            inputs.append(grpcclient.InferInput(INPUT_NAMES[0], [1, 3, FLAGS.width, FLAGS.height], "FP32"))
         outputs.append(grpcclient.InferRequestedOutput(OUTPUT_NAMES[0]))
         outputs.append(grpcclient.InferRequestedOutput(OUTPUT_NAMES[1]))
         outputs.append(grpcclient.InferRequestedOutput(OUTPUT_NAMES[2]))
@@ -289,6 +302,8 @@ if __name__ == '__main__':
 
             input_image_buffer = preprocess(frame, [FLAGS.width, FLAGS.height])
             input_image_buffer = np.expand_dims(input_image_buffer, axis=0)
+            if FLAGS.half:
+                input_image_buffer = input_image_buffer.astype(np.float16)
 
             inputs[0].set_data_from_numpy(input_image_buffer)
 
